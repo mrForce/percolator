@@ -184,6 +184,7 @@ class Reader {
    std::map<int, vector<double> > scan2rt;
    std::vector<Protein*> proteins;
    Enzyme* enzyme_;
+  bool forceMonoisotopicPTM_;
 };
 
 #endif

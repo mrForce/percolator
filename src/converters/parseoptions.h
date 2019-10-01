@@ -49,7 +49,8 @@ class ParseOptions
     targetDb(""),
     decoyDb(""),
     readProteins(false),
-    enzymeString("trypsin")
+    enzymeString("trypsin"),
+    forceMonoisotopicPTM(false)
     {};
     bool calcQuadraticFeatures;
     bool calcAAFrequencies;
@@ -78,6 +79,7 @@ class ParseOptions
     std::string decoyDb;
     bool readProteins;
     std::string enzymeString;
+  bool forceMonoisotopicPTM;
 };
 
 #endif // PARSEOPTIONS_H

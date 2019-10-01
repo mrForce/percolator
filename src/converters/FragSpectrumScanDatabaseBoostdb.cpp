@@ -63,14 +63,14 @@ void FragSpectrumScanDatabaseBoostdb::print(serializer & ser)
 
 }
 
-void FragSpectrumScanDatabaseBoostdb::printTab(ostream &tabOutputStream) {
+void FragSpectrumScanDatabaseBoostdb::printTab(ostream &tabOutputStream, bool forceMonoisotopicPTM) {
   mapdb::const_iterator it;
   for (it = bdb->begin(); it != bdb->end(); it++) {
     std::istringstream istr (it->second);
     binary_iarchive ia (istr);
     xml_schema::istream<binary_iarchive> is (ia);
     std::auto_ptr< ::percolatorInNs::fragSpectrumScan> fss (new ::percolatorInNs::fragSpectrumScan (is));
-    printTabFss(fss, tabOutputStream);
+    printTabFss(fss, tabOutputStream, forceMonoisotopicPTM);
   }
 }
 

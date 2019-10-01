@@ -45,7 +45,7 @@ public:
   
   virtual void print(serializer & ser);
   
-  virtual void printTab(ostream &tabOutputStream);
+  virtual void printTab(ostream &tabOutputStream, bool forceMonoisotopicPTM);
   
   virtual void putFSS( ::percolatorInNs::fragSpectrumScan & fss );
   

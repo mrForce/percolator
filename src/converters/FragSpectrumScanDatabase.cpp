@@ -27,7 +27,7 @@ bool FragSpectrumScanDatabase::initRTime(map<int, vector<double> >* scan2rt_par)
   return true;
 }
 
-void FragSpectrumScanDatabase::printTabFss(std::auto_ptr< ::percolatorInNs::fragSpectrumScan> fss, ostream &tabOutputStream) {
+void FragSpectrumScanDatabase::printTabFss(std::auto_ptr< ::percolatorInNs::fragSpectrumScan> fss, ostream &tabOutputStream, bool forceMonoisotopicPTM) {
   int label = 0;
   BOOST_FOREACH (const ::percolatorInNs::peptideSpectrumMatch &psm, fss->peptideSpectrumMatch()) {
     if (psm.isDecoy()) {
@@ -49,7 +49,7 @@ void FragSpectrumScanDatabase::printTabFss(std::auto_ptr< ::percolatorInNs::frag
       // adding n-term and c-term residues to peptide
       //NOTE the residues for the peptide in the PSMs are always the same for every protein
       if (isFirst) {
-        tabOutputStream << '\t' << oc.flankN() << "." << decoratePeptide(psm.peptide()) << "." << oc.flankC();
+        tabOutputStream << '\t' << oc.flankN() << "." << decoratePeptide(psm.peptide(), forceMonoisotopicPTM) << "." << oc.flankC();
         isFirst = false;
       }
       std::string proteinId = oc.proteinId();
@@ -60,18 +60,23 @@ void FragSpectrumScanDatabase::printTabFss(std::auto_ptr< ::percolatorInNs::frag
   }
 }
 
-std::string FragSpectrumScanDatabase::decoratePeptide(const ::percolatorInNs::peptideType& peptide) {
+std::string FragSpectrumScanDatabase::decoratePeptide(const ::percolatorInNs::peptideType& peptide, bool forceMonoisotopicPTM) {
   std::list<std::pair<int,std::string> > mods;
   std::string peptideSeq = peptide.peptideSequence();
   BOOST_FOREACH (const ::percolatorInNs::modificationType &mod_ref, peptide.modification()) {
     std::stringstream ss;
-    if (mod_ref.uniMod().present()) {
-      ss << "[UNIMOD:" << mod_ref.uniMod().get().accession() << "]";
-      mods.push_back(std::pair<int,std::string>(mod_ref.location(),ss.str()));
-    }
-    if (mod_ref.freeMod().present()) {
-      ss << "[" << mod_ref.freeMod().get().moniker() << "]";
-      mods.push_back(std::pair<int,std::string>(mod_ref.location(),ss.str()));
+    if(forceMonoisotopicPTM){
+      ss << "[" << mod_ref.monoisotopicMassDelta().get() << "]";
+      mods.push_back(std::pair<int, std::string>(mod_ref.location(), ss.str()));
+    }else{
+      if (mod_ref.uniMod().present()) {
+	ss << "[UNIMOD:" << mod_ref.uniMod().get().accession() << "]";
+	mods.push_back(std::pair<int,std::string>(mod_ref.location(),ss.str()));
+      }
+      if (mod_ref.freeMod().present()) {
+	ss << "[" << mod_ref.freeMod().get().moniker() << "]";
+	mods.push_back(std::pair<int,std::string>(mod_ref.location(),ss.str()));
+      }
     }
   }
   mods.sort(greater<std::pair<int,std::string> >());

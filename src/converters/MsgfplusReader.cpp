@@ -416,6 +416,12 @@ void MsgfplusReader::createPSM(const ::mzIdentML_ns::SpectrumIdentificationItemT
           std::auto_ptr< percolatorInNs::uniMod > um_p (new percolatorInNs::uniMod(mod_acc));
           mod_p->uniMod(um_p);
         }
+	/*
+	  If monoisotopic mass delta stored, add it to modification.
+	 */
+	if(mod_ref.monoisotopicMassDelta().present()){	  
+	  mod_p->monoisotopicMassDelta(mod_ref.monoisotopicMassDelta().get());
+	}
         ++numPTMs;
         peptide_p->modification().push_back(mod_p);
       }

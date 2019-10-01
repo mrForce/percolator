@@ -118,6 +118,11 @@ bool Interface::parseOpt(int argc, char **argv,const std::string &usage)
       "psm-annotation",
       "An anotation scheme used to convert the psms from the search. An example if Q# was used to describe pyro-glu formation (UNIMOD:28), and S* and T* was used to describe phosphorylation (UNIMOD:21), we would use the option -p *:21:#:28",
       "Scheme");
+  cmd.defineOption("z",
+		   "mono-ptm",
+		   "Force it to output PTMs as monoisotopic mass, rather than using the unimod identifier",
+		   "",
+		   TRUE_IF_SET);
   cmd.defineOption("P",
       "pattern",
       "Pattern used to identify the decoy PSMs. Default = \"random\".",
@@ -177,6 +182,7 @@ bool Interface::parseOpt(int argc, char **argv,const std::string &usage)
   if (cmd.optionSet("enzyme")) {
     parseOptions.enzymeString = cmd.options["enzyme"];
   }
+  if(cmd.optionSet("mono-ptm")) parseOptions.forceMonoisotopicPTM = true;
   if (cmd.optionSet("id-with-exp-mass")) parseOptions.expMassInPsmId = true;
   if (cmd.optionSet("PNGaseF")) parseOptions.pngasef = true;
   if (cmd.optionSet("aa-freq")) parseOptions.calcAAFrequencies = true;

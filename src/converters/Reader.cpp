@@ -21,6 +21,7 @@ Reader::Reader(ParseOptions __po) : po(__po) {
   minCharge = 10000;
   initMassMap(po.monoisotopic);
   enzyme_ = Enzyme::createEnzyme(po.enzymeString);
+  forceMonoisotopicPTM_ = po.forceMonoisotopicPTM;
 }
 
 Reader::Reader() : po() {
@@ -30,6 +31,7 @@ Reader::Reader() : po() {
   minCharge = 10000;
   initMassMap(po.monoisotopic);
   enzyme_ = Enzyme::createEnzyme(po.enzymeString);
+  forceMonoisotopicPTM_ = po.forceMonoisotopicPTM;
 }
 
 
@@ -70,7 +72,7 @@ void Reader::init() {
   if (po.readProteins) {
     readProteins(po.targetDb,po.decoyDb);
   }
-
+  
   // check files exists and if they are metafiles or not
   if (!po.iscombined) {
     std::ifstream targetFileIn(po.targetFN.data(), std::ios::in);
@@ -212,8 +214,7 @@ void Reader::print(ostream &outputStream, bool xmlOutput) {
       databases[i]->print(ser);
       databases[i]->terminate();
     }
-    
-    // print proteins
+        // print proteins
     if (po.readProteins && !proteins.empty()) {
       outputStream << "\n";
 
@@ -271,7 +272,7 @@ void Reader::print(ostream &outputStream, bool xmlOutput) {
       std::cerr << "Databases : " << databases.size() << std::endl;
 
     for (unsigned int i = 0; i < databases.size(); i++) {
-      databases[i]->printTab(outputStream);
+      databases[i]->printTab(outputStream, forceMonoisotopicPTM_);
       databases[i]->terminate();
     }
   }

@@ -30,6 +30,7 @@
 #include "Globals.h"
 #include "MassHandler.h"
 #include "serializer.hxx"
+
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/dom/DOM.hpp>
@@ -84,9 +85,9 @@ class FragSpectrumScanDatabase {
     virtual auto_ptr<fragSpectrumScan> deserializeFSSfromBinary(char* value,int valueSize) = 0;
     
     virtual void print(serializer & ser ) = 0;
-    virtual void printTab(ostream &tabOutputStream) = 0;
-    void printTabFss(std::auto_ptr< ::percolatorInNs::fragSpectrumScan> fss, ostream &tabOutputStream);
-    std::string decoratePeptide(const ::percolatorInNs::peptideType& peptide);
+  virtual void printTab(ostream &tabOutputStream, bool forceMonoisotopicPTM) = 0;
+  void printTabFss(std::auto_ptr< ::percolatorInNs::fragSpectrumScan> fss, ostream &tabOutputStream, bool forceMonoisotopicPTM);
+  std::string decoratePeptide(const ::percolatorInNs::peptideType& peptide, bool forceMonoisotopicPTM);
     
     virtual void terminate() = 0;
     
