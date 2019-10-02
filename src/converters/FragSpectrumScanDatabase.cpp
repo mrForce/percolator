@@ -66,8 +66,14 @@ std::string FragSpectrumScanDatabase::decoratePeptide(const ::percolatorInNs::pe
   BOOST_FOREACH (const ::percolatorInNs::modificationType &mod_ref, peptide.modification()) {
     std::stringstream ss;
     if(forceMonoisotopicPTM){
-      ss << "[" << mod_ref.monoisotopicMassDelta().get() << "]";
-      mods.push_back(std::pair<int, std::string>(mod_ref.location(), ss.str()));
+      if(mod_ref.monoisotopicMassDelta().present()){
+	ss << "[" << mod_ref.monoisotopicMassDelta().get() << "]";
+	mods.push_back(std::pair<int, std::string>(mod_ref.location(), ss.str()));
+      }else{
+	ostringstream temp;
+	temp << "Error: monoisotopic mass delta missing from PTM in peptide: " << peptideSeq << std::endl;
+	throw MyException(temp.str());
+      }
     }else{
       if (mod_ref.uniMod().present()) {
 	ss << "[UNIMOD:" << mod_ref.uniMod().get().accession() << "]";
