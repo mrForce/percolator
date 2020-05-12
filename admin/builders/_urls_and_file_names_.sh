@@ -29,7 +29,7 @@ fedora_xsd_url='http://www.codesynthesis.com/download/xsd/4.0/linux-gnu/x86_64/'
 # Ubuntu
 #
 # -- xerces --
-ubuntu_xerces='xerces-c-3.2.2'
+ubuntu_xerces='xerces-c-3.2.3'
 ubuntu_xerces_url='http://apache.mirrors.spacedump.net/xerces/c/3/sources/'${ubuntu_xerces}'.tar.gz'
 # -- xsd --
 ubuntu_xsd='xsd-3.3.0-x86_64-linux-gnu'
